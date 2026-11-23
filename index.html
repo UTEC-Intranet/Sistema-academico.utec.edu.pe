@@ -2010,7 +2010,7 @@ dialog button { background: #b3ccff; color: #132743; border-radius: 18px; paddin
           }))},
           {name:'2026 - 1', avg:student.average, merit:'9 de 10', courses:curriculum[0].map(c => ({
             ...c, absence:previousAbsence[c.code] ?? '-', levelLabel:'Nivel 1', times:1, status:'Activo',
-            syllabus:['CS6002','HH6001'].includes(c.code) ? 'Ver' : c.code === 'CC6101' ? '-' : 'No Disponible'
+            syllabus:['CS6002','HH6001'].includes(c.code) ? 'No disponible' : c.code === 'CC6101' ? '-' : 'No Disponible'
           }))}
         ];
         const credits = courses => courses.reduce((sum,c) => sum + (c.status === 'Retirado' ? 0 : Number(c.credits)), 0);
@@ -2027,7 +2027,7 @@ dialog button { background: #b3ccff; color: #132743; border-radius: 18px; paddin
             const visible = p.courses.filter(c => filter === 'all' || (filter === 'ok' ? c.state === 'Aprobado' : c.status === 'Retirado' || (c.grade !== '-' && Number(c.grade) < 11)));
             const rows = visible.map(c => [esc(c.code),esc(c.name),c.credits,
               c.grade !== '-' && Number(c.grade) < 11 ? `<span class="state-bad">${esc(c.grade)}</span>` : esc(String(c.grade).replace('.', ',')),
-              esc(c.absence),esc(c.levelLabel),c.times,esc(c.status), c.syllabus === 'Ver' ? `<button class="plain" type="button" data-syllabus="${esc(c.name)}">Ver</button>` : esc(c.syllabus)]);
+              esc(c.absence),esc(c.levelLabel),c.times,esc(c.status), esc(c.syllabus)]);
             rows.push(['','Total de créditos',credits(visible),'','','','','','']);
             const extra = p === periods[1] && filter !== 'bad' ? '<h4>Actividades Extracurriculares</h4>' + simpleTable(
               ['Código Actividad Extracurricular','Nombre Actividad Extracurricular','Número de Créditos','Estado'].map(label => ({label,center:true})),
@@ -2041,7 +2041,6 @@ dialog button { background: #b3ccff; color: #132743; border-radius: 18px; paddin
         byId('nh-view').onchange = draw;
         draw();
         byId('nh-export').onclick = () => toast('Exportación deshabilitada.');
-        el.addEventListener('click', e => { const b = e.target.closest('[data-syllabus]'); if (b) window.demoDialog('Sílabo', `El sílabo de «${b.dataset.syllabus}» no está disponible en la demostración.`); });
       }
     },
     '/students/curriculum': {
